@@ -7,7 +7,7 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Category, Color, Image, Product, Size } from "@prisma/client";
 import { Trash } from "lucide-react";
-import { useForm, SubmitHandler, Resolver } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -62,7 +62,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   // ✅ Change #1: strongly type the resolver
     
   // ✅ Change #2: pass ALL THREE generics to useForm
-  const form = useForm<ProductFormValues, any, ProductFormValues>({
+  const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData
       ? {
@@ -210,7 +210,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       disabled={loading}
                       placeholder="100"
                       {...field}
-                      onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value, 10) : "")} // 👈 parseInt
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      field.onChange(e.target.value ? parseInt(e.target.value, 10) : "")
+                    }
                     />
                   </FormControl>
                   <FormMessage />

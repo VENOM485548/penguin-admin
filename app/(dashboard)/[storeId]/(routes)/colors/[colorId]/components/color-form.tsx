@@ -91,7 +91,7 @@ const ColorForm: React.FC<ColorFormProps> = ({
     <AlertModel 
     isOpen={open}
     onClose={() => setOpen(false)}
-    onconfirm={onDelete}
+    onConfirm={onDelete}
     loading={loading} />
      <div className="flex items-center justify-between">
         <Heading title={title} description={description}></Heading>

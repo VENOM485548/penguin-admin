@@ -5,6 +5,9 @@ import { Button } from "./button";
 import { ImagePlus, Trash } from "lucide-react";
 import Image from "next/image";
 import { CldUploadWidget } from "next-cloudinary";
+import type { CloudinaryUploadWidgetResults, CloudinaryUploadWidgetInfo } from "next-cloudinary";
+
+
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -32,15 +35,22 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     return null;
   }
 
-  const handleUpload = (result: any) => {
-    const url = result.info.secure_url as string;
 
-    if (multiple) {
-      onChange([...(value || []), url]); // append
-    } else {
-      onChange([url]); // replace
-    }
-  };
+  const handleUpload = (result: CloudinaryUploadWidgetResults) => {
+  if (typeof result.info !== "object" || result.info === null) return;
+
+  const info = result.info as CloudinaryUploadWidgetInfo;
+  const url = info.secure_url;
+
+  if (!url) return;
+
+  if (multiple) {
+    onChange([...(value || []), url]);
+  } else {
+    onChange([url]);
+  }
+};
+
 
   return (
     <div>
@@ -78,8 +88,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
       <CldUploadWidget
         uploadPreset="penguin"
-        onSuccess={(result: any) => handleUpload(result)}
+        onSuccess={handleUpload} // ✅ this now matches the expected type
       >
+
         {({ open }) => {
           const onClick = () => open();
           return (

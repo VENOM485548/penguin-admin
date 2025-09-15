@@ -51,7 +51,7 @@ export const CellAction: React.FC<CellActionProps> = ({
             <AlertModel 
             isOpen={open}
             onClose={() => setOpen(false)}
-            onconfirm={onDelete}
+            onConfirm={onDelete}
             loading={loading}/>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>

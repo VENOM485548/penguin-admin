@@ -6,5 +6,4 @@ export default function Page() {
     <SignIn />
   </div>
   );
-  
-}
+};

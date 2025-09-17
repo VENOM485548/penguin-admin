@@ -14,8 +14,9 @@ export async function OPTIONS() {
 
 export async function POST(
   req: Request,
-  { params }: { params: { storeId: string } }
+  { params }: { params: Promise<{ storeId: string }> } // 👈 fixed: must be Promise
 ) {
+  const { storeId } = await params; // 👈 must await
   const { productIds } = await req.json();
 
   if (!productIds || productIds.length === 0) {
@@ -39,7 +40,7 @@ export async function POST(
   // 👉 Save order in DB
   const order = await prismadb.order.create({
     data: {
-      storeId: params.storeId,
+      storeId,
       isPaid: false,
       orderItems: {
         create: productIds.map((productId: string) => ({
@@ -55,7 +56,7 @@ export async function POST(
     currency: "INR",
     receipt: order.id, // link to DB order
     notes: {
-      storeId: params.storeId,
+      storeId,
     },
   });
 
